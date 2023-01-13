@@ -18,8 +18,8 @@ def set_version(jdk_path: str) -> None:
     elif SYSTEM in ['Windows']:
         cmd = f'setx JAVA_HOME {jdk_path} /m'
     print(f'Changed JAVA_HOME to {jdk_path}')
-    print(cmd)
-    # os.system(cmd)
+    # print(cmd)
+    os.system(cmd)
 
 
 if __name__ == '__main__':
