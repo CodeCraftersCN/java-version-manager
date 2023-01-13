@@ -5,7 +5,7 @@ import sys
 from sqlite3.dbapi2 import Connection, Cursor
 
 SYSTEM: str = platform.system().lower()
-HOME: str = os.environ['HOME']
+HOME: str = os.path.expanduser('~')
 DEFAULT_DB_PATH: str = f'{HOME}{os.sep}.java_version_manager{os.sep}'
 DEFAULT_FILENAME: str = 'main.db'
 DEFAULT_TABLE_NAME: str = 'jdks'
@@ -15,10 +15,10 @@ def set_version(jdk_path: str) -> None:
     cmd: str = ''
     if SYSTEM in ['linux', 'darwin']:
         cmd = f'export JAVA_HOME={jdk_path}'
-    elif SYSTEM in ['Windows']:
+    elif SYSTEM in ['windows']:
         cmd = f'setx JAVA_HOME {jdk_path} /m'
     print(f'Changed JAVA_HOME to {jdk_path}')
-    # print(cmd)
+    # print(f"Running command: {cmd}")
     os.system(cmd)
 
 
