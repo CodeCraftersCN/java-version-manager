@@ -23,6 +23,7 @@ def set_version(jdk_path: str) -> None:
 
 
 if __name__ == '__main__':
+    # For macOS users, there exist a binary for java management at /usr/libexec/java_home
     if 'darwin' == SYSTEM:
         print('You can use /usr/libexec/java_home as an alternative in a Mac, there is no need to use this '
               'program.')
@@ -30,14 +31,17 @@ if __name__ == '__main__':
         if is_continue_use.lower() != 'y':
             exit(0)
 
+    # Check whether the user is running this app at the first time
     first_run: bool = False
     if not os.path.exists(DEFAULT_DB_PATH):
         print(f'Path {DEFAULT_DB_PATH} does not exist, creating now.')
         os.makedirs(DEFAULT_DB_PATH)
 
+    # Create SQLite Database connection
     db: Connection = sqlite3.connect(f'{DEFAULT_DB_PATH}{os.sep}{DEFAULT_FILENAME}')
     cursor: Cursor = db.cursor()
 
+    # Check whether the table is existed
     tables = cursor.execute("select name from sqlite_master where type = 'table' order by name;") \
         .fetchall()
     # if table is not created, then create one
@@ -49,6 +53,7 @@ create table {DEFAULT_TABLE_NAME}(
     path text not null
 )""")
 
+    # Tell user not to delete db file
     if first_run:
         print(f"""Welcome to use java-version-manager!
 We are giving you some important information about this program.
@@ -57,6 +62,7 @@ This application will write a file {DEFAULT_FILENAME} in [{DEFAULT_DB_PATH}], wh
 database. This file contains important information about all installed jdks in your computer, so do not remove 
 this file.""")
 
+    # Detect system arguments
     if len(sys.argv) > 0:
         try:
             command = sys.argv[1]
