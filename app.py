@@ -15,11 +15,19 @@ def set_version(jdk_path: str) -> None:
     cmd: str = ''
     if SYSTEM in ['linux', 'darwin']:
         cmd = f'export JAVA_HOME={jdk_path}'
+
+        if 'linux' == SYSTEM:
+            with open(f'{HOME}/.bashrc', encoding='utf-8', mode='a') as file:
+                file.write(cmd)
+                print(
+                    f'Command written to file succeed, '
+                    f'please run command [source {HOME}/.bashrc] to complete settings.')
+
     elif SYSTEM in ['windows']:
+        print(f'Changed JAVA_HOME to {jdk_path}')
+        print(f"Running command: {cmd}")
         cmd = f'setx JAVA_HOME {jdk_path} /m'
-    print(f'Changed JAVA_HOME to {jdk_path}')
-    # print(f"Running command: {cmd}")
-    os.system(cmd)
+        os.system(cmd)
 
 
 if __name__ == '__main__':
